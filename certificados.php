@@ -103,7 +103,7 @@ class Certificados{
 		$pfx = $pfx[0].'.pfx';
 		
 		if (file_exists($nombreKeyPem) && file_exists($nombreCerPem)) {
-			$salida = shell_exec('echo 4xBbCfSj | sudo -S openssl pkcs12 -export -inkey '.$nombreKeyPem.' -in '.$nombreCerPem.' -out '.$pfx.' -passout pass:'.$password.' 2>&1');
+			$salida = shell_exec('openssl pkcs12 -export -inkey '.$nombreKeyPem.' -in '.$nombreCerPem.' -out '.$pfx.' -passout pass:'.$password.' 2>&1');
 			if (strpos($salida, '[sudo] password for sandbox2014') !== false){
 				$this->_pfx = $pfx;
 				$this->_estableceError(1);

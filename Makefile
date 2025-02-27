@@ -5,7 +5,7 @@ CERTFILE ?= $(wildcard $(SATDIR)/*.cer)
 SATPASS ?= pUtPa55w0rDh3rE
 export KEYFILE CERTFILE SATPASS
 # or better, from command line, type a space (to keep plaintext out of
-# history file), then: SATPASS=MySecretPassword
+# history file), then: export SATPASS=MySecretPassword
 # and when you're done with your SAT files, `unset SATPASS`
 all:
 	@echo location of files: $(SATDIR)

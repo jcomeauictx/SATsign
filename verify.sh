@@ -1,10 +1,12 @@
-certificados.php:			$salida = shell_exec('openssl pkcs8 -inform DER -in '.$nombreKey.' -out '.$nombreKey.'.pem -passin pass:'.$password.' 2>&1');
-certificados.php:			$salida = shell_exec('openssl x509 -inform DER -outform PEM -in '.$nombreCer.' -pubkey -out '.$nombreCer.'.pem 2>&1');
-certificados.php:			$salida = shell_exec('echo 4xBbCfSj | sudo -S openssl pkcs12 -export -inkey '.$nombreKeyPem.' -in '.$nombreCerPem.' -out '.$pfx.' -passout pass:'.$password.' 2>&1');
-certificados.php:			$salida = shell_exec('openssl x509 -in '.$nombreCerPem.' -noout -serial  2>&1');
-certificados.php:			$salida = shell_exec('openssl x509 -in '.$nombreCerPem.' -noout -startdate 2>&1');
-certificados.php:			$salida = shell_exec('openssl x509 -in '.$nombreCerPem.' -noout -enddate 2>&1');
-certificados.php:			$salida = shell_exec('openssl x509 -in '.$nombreCerPem.' -noout -subject 2>&1');
-certificados.php:			$salidaCer = shell_exec('openssl x509 -noout -modulus -in '.$nombreCerPem.' 2>&1');
-certificados.php:			$salidaKey = shell_exec('openssl rsa -noout -modulus -in '.$nombreKeyPem.' 2>&1');
-README.md:certificados-sat-openssl
+#!/bin/bash
+openssl pkcs8 -inform DER -in $KEYFILE -out $KEYFILE.pem -passin pass:$SATPASS
+openssl x509 -inform DER -outform PEM -in $CERTFILE -pubkey -out $CERTFILE.pem
+if false; then
+	echo 4xBbCfSj | openssl pkcs12 -export -inkey $KEYFILE.pem -in $CERTFILE.pem -out $KEYFILE.pfx -passout pass:$SATPASS
+	openssl x509 -in $CERTFILE.pem -noout -serial
+	openssl x509 -in $CERTFILE.pem -noout -startdate
+	openssl x509 -in $CERTFILE.pem -noout -enddate
+	openssl x509 -in $CERTFILE.pem -noout -subject
+	openssl x509 -noout -modulus -in $CERTFILE.pem
+	openssl rsa -noout -modulus -in $KEYFILE.pem
+fi

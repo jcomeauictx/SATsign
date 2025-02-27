@@ -6,6 +6,7 @@ SATPASS ?= pUtPa55w0rDh3rE
 export KEYFILE CERTFILE SATPASS
 # or better, from command line, type a space (to keep plaintext out of
 # history file), then: export SATPASS=MySecretPassword
+# NOTE: don't actually use MySecretPassword! type your own instead!
 # and when you're done with your SAT files, `unset SATPASS`
 all:
 	@echo location of files: $(SATDIR)

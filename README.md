@@ -1,7 +1,7 @@
 certificados-sat-openssl
 ========================
 
-Manejo de certificados y sello digital SAT - PHP
+Manejo de certificados y sello digital SAT
 
 - Permite crear archivos key.pem
 - Permite crear archivos cer.pem

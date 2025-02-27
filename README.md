@@ -15,7 +15,7 @@ Manejo de certificados y sello digital SAT
 # notes for English-speaking users
 
 * I just grepped the openssl calls out of the php file and made a bash script
-* I don´t know what the .pfx file is for, and am not curious enough to google it
+* the .pfx file is to import into gpgsm for signing. could also name as .p12
 * If the password you gave SAT doesn't work, maybe they upcased or swapcased it
   (they swapcased mine; either that or the caps lock was on when I typed it,
    and I wasn´t allowed to see what I was typing)

@@ -22,3 +22,4 @@ Manejo de certificados y sello digital SAT - PHP
 * typing `make` will do all that the php script does
 * the results will be found in the directory where the original files from
   SAT were stored, e.g. /mnt/usb/FIEL_ABCD950505XY9_20250225093522/
+* for use with PGP: <https://stackoverflow.com/a/62613267/493161>

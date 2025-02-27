@@ -17,6 +17,9 @@ openssl x509 -in $CERTFILE.pem -noout -serial
 openssl x509 -in $CERTFILE.pem -noout -startdate
 openssl x509 -in $CERTFILE.pem -noout -enddate
 openssl x509 -in $CERTFILE.pem -noout -subject
+# generate pkcs12 combined cert and key for gpgsm
+# https://stackoverflow.com/a/62613267/493161
+openssl pkcs12 -export -in $CERTFILE.pem -inkey $KEYFILE.pem -out $KEYFILE.p12
 modcert=$(openssl x509 -noout -modulus -in $CERTFILE.pem)
 modkey=$(openssl rsa -noout -modulus -in $KEYFILE.pem)
 if [ -n "$modcert" ]; then

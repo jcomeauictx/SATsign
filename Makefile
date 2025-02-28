@@ -13,20 +13,21 @@ export KEYFILE CERTFILE SATPASS
 all: initialize importcerts trust test
 initialize: $(KEYFILE).pfx
 $(KEYFILE).pfx: verify.sh
-	@echo location of files: $(SATDIR)
-	@echo key file: $(KEYFILE)
-	@echo certificate file: $(CERTFILE)
-	@echo password: $(SATPASS)
+	@echo location of files: $(SATDIR) >&2
+	@echo key file: $(KEYFILE) >&2
+	@echo certificate file: $(CERTFILE) >&2
+	@echo password: $(SATPASS) >&2
 	bash $<
 trust: trustlist.txt
 	while read line; do \
 	 if [ -e $(TRUSTLIST) ] && grep -q "$$line" $(TRUSTLIST); then \
-	  echo $$line already trusted; \
-	 else echo $$line >>$(TRUSTLIST) && echo $$line now trusted; \
+	  echo $$line already trusted >&2; \
+	 else echo $$line >>$(TRUSTLIST) && echo $$line now trusted >&2; \
 	 fi; \
 	done < $<
 test: /tmp/test.txt.signed
 importcerts: $(KEYFILE).pfx
+	@echo 'Just hit the <ENTER> key at passphrase prompt' >&2
 	gpgsm --import $<
 	gpgsm --import sat.certs/*.{crt,cer}
 unimportcerts:

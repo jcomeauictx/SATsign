@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 SATDIR ?= $(word 1, $(wildcard $(HOME)/FIEL_* $(HOME)/*/FIEL_* /mnt/FIEL_* \
  /mnt/*/FIEL_*))
 KEYFILE ?= $(wildcard $(SATDIR)/Claveprivada_FIEL_*.key)
@@ -14,3 +15,5 @@ all:
 	@echo certificate file: $(CERTFILE)
 	@echo password: $(SATPASS)
 	bash verify.sh
+importcerts:
+	gpgsm --import sat.certs/*.{crt,cer}

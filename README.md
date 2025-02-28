@@ -23,3 +23,4 @@ Manejo de certificados y sello digital SAT
 * the results will be found in the directory where the original files from
   SAT were stored, e.g. /mnt/usb/FIEL_ABCD950505XY9_20250225093522/
 * for use with PGP: <https://stackoverflow.com/a/62613267/493161>
+* parent certs for potential use with pgpsm signing can be found at <http://omawww.sat.gob.mx/tramitesyservicios/Paginas/certificado_sello_digital.htm> and <https://www.cloudb.sat.gob.mx/TSP_MX.pdf>; but I haven't gotten this to work yet.

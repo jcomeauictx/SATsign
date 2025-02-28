@@ -38,7 +38,12 @@ unimportcerts:
 	 | awk '$$1 ~ /^ID:/ {print $$2}')
 /tmp/test.txt:
 	echo testing, testing, one two three... > $@
-%.txt.signed: %.txt
+%.txt.sig: %.txt
+	gpgsm --detach-sign $< >$@
+%.txt.verify: %.txt.sig %.txt
+	gpgsm --verify $+
+%.signed.pdf: %.pdf
 	gpgsm --sign $< >$@
-%.pdf.signed: %.pdf
-	gpgsm --sign $< >$@
+%.pdf.verify: %.signed.pdf
+	gpgsm --verify $<
+.FORCE:

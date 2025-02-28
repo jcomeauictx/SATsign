@@ -25,7 +25,7 @@ trust: trustlist.txt
 	 else echo $$line >>$(TRUSTLIST) && echo $$line now trusted >&2; \
 	 fi; \
 	done < $<
-test: /tmp/test.txt.signed
+test: /tmp/test.txt.sig /tmp/test.txt.verify
 importcerts: $(KEYFILE).pfx
 	@echo 'Just hit the <ENTER> key at passphrase prompt' >&2
 	gpgsm --import $<
@@ -40,10 +40,17 @@ unimportcerts:
 	echo testing, testing, one two three... > $@
 %.txt.sig: %.txt
 	gpgsm --detach-sign $< >$@
+%.pdf.sig: %.pdf
+	gpgsm --detach-sign $< >$@
 %.txt.verify: %.txt.sig %.txt
 	gpgsm --verify $+
+%.txt.verifyonly: %.txt
+	# won't recreate sig even if original has changed
+	# for testing that verify fails on changed txt file
+	gpgsm --verify $<.sig $<
 %.signed.pdf: %.pdf
 	gpgsm --sign $< >$@
 %.pdf.verify: %.signed.pdf
 	gpgsm --verify $<
-.FORCE:
+%.pdf.verify: %.pdf.sig %.pdf
+	gpgsm --verify $+

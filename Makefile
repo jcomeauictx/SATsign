@@ -5,6 +5,7 @@ KEYFILE ?= $(wildcard $(SATDIR)/Claveprivada_FIEL_*.key)
 CERTFILE ?= $(wildcard $(SATDIR)/*.cer)
 SATPASS ?= pUtPa55w0rDh3rE
 TRUSTLIST ?= $(HOME)/.gnupg/trustlist.txt
+REALLY_DELETE ?= false
 export KEYFILE CERTFILE SATPASS
 # or better, from command line, type a space (to keep plaintext out of
 # history file), then: export SATPASS=MySecretPassword
@@ -33,7 +34,7 @@ importcerts: $(KEYFILE).pfx
 unimportcerts:
 	# NOTE: disabled by default!
 	# it will delete all gpgsm certificates and private keys!
-	false  # NOTE: remove this at your peril!
+	$(REALLY_DELETE)  # NOTE: set this true at your peril!
 	gpgsm --delete-keys $$(gpgsm --list-keys \
 	 | awk '$$1 ~ /^ID:/ {print $$2}')
 /tmp/test.txt:

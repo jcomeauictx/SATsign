@@ -30,3 +30,4 @@ Manejo de certificados y sello digital SAT
 * using detached signatures after finding that nothing can read signed txt
   files, and though browsers can mostly view signed PDFs they aren't able to
   detect nor verify the signatures.
+* [build complete chain in pfx/p12 file](https://serverfault.com/a/1011396/58945)

@@ -48,6 +48,7 @@ fi
 # generate pkcs12 combined cert and key for gpgsm
 # https://stackoverflow.com/a/62613267/493161
 # https://serverfault.com/a/1011396/58945
-echo 'Just hit the <ENTER> key at password prompt' >&2
+echo 'Just hit the <ENTER> key at password prompts below' >&2
+openssl verify -verbose -show_chain -CApath sat.certs $CERTFILE.pem
 openssl pkcs12 -export -inkey $KEYFILE.pem -in $CERTFILE.pem \
  -out $KEYFILE.pfx -legacy -chain -CApath sat.certs

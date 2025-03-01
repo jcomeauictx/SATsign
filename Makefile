@@ -30,7 +30,7 @@ test: /tmp/test.txt.sig /tmp/test.txt.verify
 importcerts: $(KEYFILE).pfx
 	@echo 'Just hit the <ENTER> key at passphrase prompt' >&2
 	gpgsm --import $<
-	gpgsm --import sat.certs/*.{crt,cer}
+	#gpgsm --import sat.certs/*.{crt,cer}
 unimportcerts:
 	# NOTE: disabled by default!
 	# it will delete all gpgsm certificates and private keys!
@@ -55,3 +55,9 @@ unimportcerts:
 	gpgsm --verify $<
 %.pdf.verify: %.pdf.sig %.pdf
 	gpgsm --verify $+
+certclean:
+	rm -f $(KEYFILE).pem $(CERTFILE).pem $(KEYFILE).pfx $(KEYFILE).p12
+clean: certclean
+	rm -f /tmp/test.txt*
+ls:
+	ls $(dir $(KEYFILE))

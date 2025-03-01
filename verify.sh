@@ -28,10 +28,6 @@ if [ -z "$SATPASS" ] || [ $SATPASS = "pUtPa55w0rDh3rE" ] \
 fi
 openssl pkcs8 -inform DER -in $KEYFILE -out $KEYFILE.pem -passin pass:$SATPASS
 openssl x509 -inform DER -outform PEM -in $CERTFILE -pubkey -out $CERTFILE.pem
-# generate pkcs12 combined cert and key for gpgsm
-# https://stackoverflow.com/a/62613267/493161
-openssl pkcs12 -export -inkey $KEYFILE.pem -in $CERTFILE.pem \
- -out $KEYFILE.pfx -legacy
 openssl x509 -in $CERTFILE.pem -noout -serial
 openssl x509 -in $CERTFILE.pem -noout -startdate
 openssl x509 -in $CERTFILE.pem -noout -enddate
@@ -49,3 +45,9 @@ else
 	echo could not find modulus of certificate and/or key >&2
 	exit 1
 fi
+# generate pkcs12 combined cert and key for gpgsm
+# https://stackoverflow.com/a/62613267/493161
+# https://serverfault.com/a/1011396/58945
+echo 'Just hit the <ENTER> key at password prompt' >&2
+openssl pkcs12 -export -inkey $KEYFILE.pem -in $CERTFILE.pem \
+ -out $KEYFILE.pfx -legacy -chain -CApath sat.certs

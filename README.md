@@ -31,3 +31,13 @@ Manejo de certificados y sello digital SAT
   files, and though browsers can mostly view signed PDFs they aren't able to
   detect nor verify the signatures.
 * [build complete chain in pfx/p12 file](https://serverfault.com/a/1011396/58945) (had to run `openssl rehash -compat .` inside sat.certs directory first).
+* for use with Firefox and LibreOffice, first set up a separate profile
+  (I called mine SAT) by starting firefox with the -ProfileManager option.
+* in firefox, click "hamburger" icon at upper right for settings, then
+  Privacy & Security | Certificates | View Certificates | Your Certificates | Import
+  Locate the pfx file and import it, then under the Authorities tab import it
+  again. Click the OK button in Certificate Manager to close it.
+* in loffice, select Tools | Options | LibreOffice | Security | Certificate,
+  and choose the firefox:SAT profile you just made. Then, from
+  File | Digital Signatures | Digital Signatures, you can sign a PDF document.
+  It will warn that the signature could not be verified.

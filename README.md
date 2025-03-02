@@ -47,3 +47,4 @@ Manejo de certificados y sello digital SAT
   and choose the firefox:SAT profile you just made. Then, from
   File | Digital Signatures | Digital Signatures, you can sign a PDF document.
   It will show that the signature is valid.
+* [Signing from command line](https://help.libreoffice.org/latest/he/text/shared/guide/pdf_params.html), [and more details](https://vmiklos.hu/blog/pdf-convert-to.html)

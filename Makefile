@@ -50,7 +50,12 @@ unimportcerts:
 	# for testing that verify fails on changed txt file
 	gpgsm --verify $<.sig $<
 %.signed.pdf: %.pdf
-	gpgsm --sign $< >$@
+	subject="$$($(MAKE) -s subject)" && \
+	soffice --invisible --convert-to pdf:\"write_pdf_Export\":{\
+	 \"SignPDF\":{\"type\":"\boolean\",\"value\":\"true\",\
+	 \"SignCertificateSubjectName\":{\
+	 \"type\":\"string\",\"value\":\"$$subject\"\
+	}}" /tmp/test.txt --outdir ${@D}
 %.pdf.verify: %.signed.pdf
 	gpgsm --verify $<
 %.pdf.verify: %.pdf.sig %.pdf
@@ -61,3 +66,6 @@ clean: certclean
 	rm -f /tmp/test.txt*
 ls:
 	ls $(dir $(KEYFILE))
+subject: $(CERTFILE)
+	openssl x509 -in $< -noout -subject  -nameopt RFC2253 | \
+	 sed 's/^subject=//'

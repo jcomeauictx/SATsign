@@ -19,6 +19,8 @@ $(KEYFILE).pfx: verify.sh
 	@echo certificate file: $(CERTFILE) >&2
 	@echo password: $(SATPASS) >&2
 	bash $<
+SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
+	 -nameopt RFC2253 | sed 's/^subject=//')
 trust: trustlist.txt
 	while read line; do \
 	 if [ -e $(TRUSTLIST) ] && grep -q "$$line" $(TRUSTLIST); then \
@@ -51,11 +53,16 @@ unimportcerts:
 	gpgsm --verify $<.sig $<
 %.signed.pdf: %.pdf
 	subject="$$($(MAKE) -s subject)" && \
-	soffice --invisible --convert-to pdf:\"write_pdf_Export\":{\
-	 \"SignPDF\":{\"type\":"\boolean\",\"value\":\"true\",\
+	soffice --invisible --convert-to pdf:\"draw_pdf_Export\":{\
+	 \"SignPDF\":{\"type\":"\boolean\",\"value\":\"true\"},\
 	 \"SignCertificateSubjectName\":{\
 	 \"type\":\"string\",\"value\":\"$$subject\"\
-	}}" /tmp/test.txt --outdir ${@D}
+	}}" $< --outdir ${@D}
+%.signed.pdf: %.txt
+	soffice --invisible --convert-to 'pdf:"draw_pdf_Export":{\
+	  "SignPDF":{"type":"boolean","value":"true"},\
+	  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}\
+	 }' --outdir ${@D} $<
 %.pdf.verify: %.signed.pdf
 	gpgsm --verify $<
 %.pdf.verify: %.pdf.sig %.pdf
@@ -66,6 +73,3 @@ clean: certclean
 	rm -f /tmp/test.txt*
 ls:
 	ls $(dir $(KEYFILE))
-subject: $(CERTFILE)
-	openssl x509 -in $< -noout -subject  -nameopt RFC2253 | \
-	 sed 's/^subject=//'

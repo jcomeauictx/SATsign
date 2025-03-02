@@ -35,8 +35,10 @@ Manejo de certificados y sello digital SAT
   (I called mine SAT) by starting firefox with the -ProfileManager option.
 * in firefox, click "hamburger" icon at upper right for settings, then
   Privacy & Security | Certificates | View Certificates | Your Certificates | Import
-  Locate the pfx file and import it, then under the Authorities tab import it
-  again. Click the OK button in Certificate Manager to close it.
+  Locate the pfx file and import it; you will see it imports your key under
+  Your Certificates, and *also* imports the SAT cert, and the self-signed
+  Banco de Mexico root certificate, under Authorities.
+  Click the OK button in Certificate Manager to close it.
 * in loffice, select Tools | Options | LibreOffice | Security | Certificate,
   and choose the firefox:SAT profile you just made. Then, from
   File | Digital Signatures | Digital Signatures, you can sign a PDF document.

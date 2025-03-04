@@ -6,7 +6,11 @@ CERTFILE ?= $(wildcard $(SATDIR)/*.cer)
 SATPASS ?= pUtPa55w0rDh3rE
 TRUSTLIST ?= $(HOME)/.gnupg/trustlist.txt
 REALLY_DELETE ?= false
-export KEYFILE CERTFILE SATPASS
+ifeq ($(SHOWENV),)
+ export KEYFILE CERTFILE SATPASS
+else
+ export
+endif
 # or better, from command line, type a space (to keep plaintext out of
 # history file), then: export SATPASS=MySecretPassword
 # NOTE: don't actually use MySecretPassword! type your own instead!
@@ -63,8 +67,6 @@ unimportcerts:
 	  "SignPDF":{"type":"boolean","value":"true"},\
 	  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}\
 	 }' --outdir ${@D} $<
-%.pdf.verify: %.signed.pdf
-	gpgsm --verify $<
 %.pdf.verify: %.pdf.sig %.pdf
 	gpgsm --verify $+
 certclean:
@@ -73,3 +75,9 @@ clean: certclean
 	rm -f /tmp/test.txt*
 ls:
 	ls $(dir $(KEYFILE))
+env:
+ifeq ($(SHOWENV),)
+	$(MAKE) SHOWENV=1 $@
+else
+	$@
+endif

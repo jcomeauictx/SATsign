@@ -56,12 +56,12 @@ unimportcerts:
 	# for testing that verify fails on changed txt file
 	gpgsm --verify $<.sig $<
 %.signed.pdf: %.pdf
-	soffice --invisible --convert-to 'pdf:"draw_pdf_Export":{\
+	soffice --invisible --convert-to 'signed.pdf:draw_pdf_Export:{\
 	  "SignPDF":{"type":"boolean","value":"true"},\
 	  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}\
 	 }' --outdir ${@D} $<
 %.signed.pdf: %.txt
-	soffice --invisible --convert-to 'pdf:"draw_pdf_Export":{\
+	soffice --invisible --convert-to 'signed.pdf:draw_pdf_Export:{\
 	  "SignPDF":{"type":"boolean","value":"true"},\
 	  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}\
 	 }' --outdir ${@D} $<

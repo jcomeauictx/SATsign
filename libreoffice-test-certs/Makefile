@@ -23,7 +23,7 @@ CONVERT += }
 test.txt:
 	echo testing, testing, one two three... > $@
 %.signed.pdf: %.txt
-	$(SOFFICE) --invisible --convert-to 'pdf:$(CONVERT)' \
+	$(SOFFICE) --invisible --convert-to 'signed.pdf:$(CONVERT)' \
 	 --outdir ${@D} $<
 env:
 ifeq ($(SHOWENV),)

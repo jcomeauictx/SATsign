@@ -16,13 +16,15 @@ all: initialize test.txt test.signed.pdf
 initialize: $(PFX_KEY)
 SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
 	 -nameopt RFC2253 | sed 's/^subject=//')
+CONVERT := "draw_pdf_Export": {
+CONVERT +=  "SignPDF":{"type":"boolean","value":"true"},
+CONVERT +=  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}
+CONVERT += }
 test.txt:
 	echo testing, testing, one two three... > $@
 %.signed.pdf: %.txt
-	$(SOFFICE) --invisible --convert-to 'pdf:"draw_pdf_Export":{\
-	  "SignPDF":{"type":"boolean","value":"true"},\
-	  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}\
-	 }' --outdir ${@D} $<
+	$(SOFFICE) --invisible --convert-to 'pdf:$(CONVERT)' \
+	 --outdir ${@D} $<
 env:
 ifeq ($(SHOWENV),)
 	$(MAKE) SHOWENV=1 $@
@@ -47,4 +49,4 @@ $(PFX_KEY): $(PEM_CERTS)
 soffice:
 	$(SOFFICE)
 clean:
-	rm -f *.pem *.0
+	rm -f *.pem *.pfx *.0

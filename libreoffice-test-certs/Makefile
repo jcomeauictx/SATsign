@@ -10,10 +10,11 @@ STRACE ?= strace -o sign.log -v -f -s256
 SOFFICE ?= $(wildcard ../../libreoffice-core/instdir/program/soffice)
 SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
 	 -nameopt RFC2253 | sed 's/^subject=//')
-CONVERT := "draw_pdf_Export": {
-CONVERT +=  "SignPDF":{"type":"boolean","value":"true"},
-CONVERT +=  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}
-CONVERT += }
+CONVERT := "draw_pdf_Export":{
+CONVERT := $(CONVERT)"SignPDF":{"type":"boolean","value":"true"},
+CONVERT := $(CONVERT)"SignCertificateSubjectName":
+CONVERT := $(CONVERT){"type":"string","value":"$(SUBJECT)"}
+CONVERT := $(CONVERT)}
 ifeq ($(SHOWENV),)
  export KEYFILE CERTFILE SATPASS
 else

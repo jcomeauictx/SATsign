@@ -36,6 +36,7 @@ $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
 	# https://stackoverflow.com/a/62613267/493161
 	# https://serverfault.com/a/1011396/58945
 	echo 'Just hit the <ENTER> key at password prompts below' >&2
+	openssl rehash -compat .
 	openssl verify -verbose -show_chain -CApath . $(word 2, $+)
 	openssl pkcs12 -export -inkey $< -in $(word 2, $+) \
 	 -out $@ -legacy -chain -CApath .

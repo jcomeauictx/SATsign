@@ -51,4 +51,4 @@ fi
 echo 'Just hit the <ENTER> key at password prompts below' >&2
 openssl verify -verbose -show_chain -CApath sat.certs $CERTFILE.pem
 openssl pkcs12 -export -inkey $KEYFILE.pem -in $CERTFILE.pem \
- -out $KEYFILE.pfx -legacy -chain -CApath sat.certs
+ -out $KEYFILE.pfx -passout pass: -legacy -chain -CApath sat.certs

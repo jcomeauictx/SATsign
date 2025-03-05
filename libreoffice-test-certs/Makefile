@@ -6,7 +6,14 @@ CERTFILE ?= $(wildcard certificate.der)
 ROOTFILES := $(wildcard *[Rr]ootCA.der)
 DER_CERTS := $(KEYFILE) $(CERTFILE) $(ROOTFILES)
 PEM_CERTS := $(DER_CERTS:.der=.pem)
+STRACE ?= strace -o sign.log -v -f -s256
 SOFFICE ?= $(wildcard ../../libreoffice-core/instdir/program/soffice)
+SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
+	 -nameopt RFC2253 | sed 's/^subject=//')
+CONVERT := "draw_pdf_Export": {
+CONVERT +=  "SignPDF":{"type":"boolean","value":"true"},
+CONVERT +=  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}
+CONVERT += }
 ifeq ($(SHOWENV),)
  export KEYFILE CERTFILE SATPASS
 else
@@ -14,16 +21,10 @@ else
 endif
 all: initialize test.txt test.signed.pdf
 initialize: $(PFX_KEY)
-SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
-	 -nameopt RFC2253 | sed 's/^subject=//')
-CONVERT := "draw_pdf_Export": {
-CONVERT +=  "SignPDF":{"type":"boolean","value":"true"},
-CONVERT +=  "SignCertificateSubjectName":{"type":"string","value":"$(SUBJECT)"}
-CONVERT += }
 test.txt:
 	echo testing, testing, one two three... > $@
 %.signed.pdf: %.txt
-	$(SOFFICE) --invisible --convert-to 'signed.pdf:$(CONVERT)' \
+	$(STRACE) $(SOFFICE) --invisible --convert-to 'signed.pdf:$(CONVERT)' \
 	 --outdir ${@D} $<
 env:
 ifeq ($(SHOWENV),)

@@ -1,1 +1,5 @@
 *.pem
+*.pfx
+*.0
+test.txt
+test.signed.pdf

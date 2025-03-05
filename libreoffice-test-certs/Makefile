@@ -44,5 +44,7 @@ $(PFX_KEY): $(PEM_CERTS)
 	echo 'Just hit the <ENTER> key at password prompts below' >&2	
 	openssl pkcs12 -export -inkey $< -in $(word 2, $+) \
 	 -out $@ -legacy -chain -CApath .
+soffice:
+	$(SOFFICE)
 clean:
 	rm -f *.pem *.0

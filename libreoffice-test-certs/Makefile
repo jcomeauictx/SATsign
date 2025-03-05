@@ -50,4 +50,4 @@ $(PFX_KEY): $(PEM_CERTS)
 soffice:
 	$(SOFFICE)
 clean:
-	rm -f *.pem *.pfx *.0
+	rm -f *.pem *.pfx *.0 test.signed.pdf test.txt *.log

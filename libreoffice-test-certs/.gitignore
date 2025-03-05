@@ -1,5 +1,6 @@
 *.pem
 *.pfx
 *.0
+*.log
 test.txt
 test.signed.pdf

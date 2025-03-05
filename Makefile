@@ -32,7 +32,7 @@ trust: trustlist.txt
 	 else echo $$line >>$(TRUSTLIST) && echo $$line now trusted >&2; \
 	 fi; \
 	done < $<
-test: /tmp/test.txt.sig /tmp/test.txt.verify
+test: /tmp/test.txt.sig /tmp/test.txt.verify /tmp/test.signed.pdf
 importcerts: $(KEYFILE).pfx
 	@echo 'Just hit the <ENTER> key at passphrase prompt' >&2
 	gpgsm --import $<

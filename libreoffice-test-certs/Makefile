@@ -27,7 +27,8 @@ else
 	$@
 endif
 $(KEYFILE).pem: $(KEYFILE)
-	openssl pkcs8 -inform DER -in $< -out $@
+	# keyfile is not encrypted: github.com/openssl/openssl/issues/10543
+	openssl pkcs8 -nocrypt -inform DER -in $< -out $@
 $(CERTFILE).pem: $(CERTFILE)
 	openssl x509 -inform DER -in $< -pubkey -out $@
 $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem

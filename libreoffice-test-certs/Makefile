@@ -45,9 +45,9 @@ $(PFX_KEY): $(PEM_CERTS)
 	# rehash will error on noncompatible files, just ignore
 	openssl rehash -compat . || true
 	openssl verify -verbose -show_chain -CApath . $(word 2, $+)
-	echo 'Just hit the <ENTER> key at password prompts below' >&2	
+	@echo 'Just hit the <ENTER> key at any password prompts below' >&2	
 	openssl pkcs12 -export -inkey $< -in $(word 2, $+) \
-	 -out $@ -legacy -chain -CApath .
+	 -out $@ -passout pass: -legacy -chain -CApath .
 soffice:
 	$(SOFFICE)
 clean:

@@ -18,7 +18,7 @@ Manejo de certificados y sello digital SAT
 * The .pfx file is to import into gpgsm for signing. could also name as .p12
 * If the password you gave SAT doesn't work, maybe they upcased or swapcased it
   (they swapcased mine; either that or the caps lock was on when I typed it,
-   and I wasn´t allowed to see what I was typing)
+   and I wasn't allowed to see what I was typing)
 * Typing `make` will do all that the php script does
 * The results will be found in the directory where the original files from
   SAT were stored, e.g. /mnt/usb/FIEL_ABCD950505XY9_20250225093522/

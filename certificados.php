@@ -50,7 +50,7 @@ class Certificados{
 				$this->_estableceError(1);
 				return $this->_return;
 			}else if (strpos($salida, 'Error decrypting') !== false) {
-				$this->_estableceError(0, 'Contraseña incorrecta');
+				$this->_estableceError(0, 'Contrase&ntilde;a incorrecta');
 				return $this->_return;
 			}else {
 				$this->_estableceError(0, 'No se logro generar el key.pem');

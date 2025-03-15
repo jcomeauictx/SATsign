@@ -79,3 +79,8 @@ ifeq ($(SHOWENV),)
 else
 	$@
 endif
+pemfiles: $(KEYFILE).pem $(CERTFILE).pem
+$(KEYFILE).pem: $(KEYFILE)
+	openssl pkcs8 -inform DER -in $< -out $@ -passin pass:$SATPASS
+$(CERTFILE).pem: $(CERTFILE)
+	openssl x509 -inform DER -outform PEM -in $< -pubkey -out $@

@@ -85,7 +85,7 @@ ifeq ($(SATPASS),MySecretPassword)
 else ifeq ($(SATPASS),pUtPa55w0rDh3rE)
 	@echo $(SATPASS) is not a valid password! >&2
 else ifneq ($(SATPASS),)
-	PASS := -passin pass:$(SATPASS)
+PASS := -passin pass:$(SATPASS)
 endif
 	openssl pkcs8 -inform DER -in $< -out $@ $(PASS) || \
 	 (rm -f $@; false)

@@ -4,6 +4,7 @@ SATDIR ?= $(word 1, $(wildcard $(HOME)/FIEL_* $(HOME)/*/FIEL_* /mnt/FIEL_* \
 KEYFILE ?= $(wildcard $(SATDIR)/Claveprivada_FIEL_*.key)
 CERTFILE ?= $(wildcard $(SATDIR)/*.cer)
 SATPASS ?= pUtPa55w0rDh3rE
+PASS :=# gets set later during pfx creation
 TRUSTLIST ?= $(HOME)/.gnupg/trustlist.txt
 REALLY_DELETE ?= false
 ifeq ($(SHOWENV),)
@@ -76,18 +77,29 @@ else
 	$@
 endif
 pemfiles: $(KEYFILE).pem $(CERTFILE).pem
+# openssl creates empty output file when it fails, so remove it
 $(KEYFILE).pem: $(KEYFILE)
-	openssl pkcs8 -inform DER -in $< -out $@ -passin pass:$(SATPASS)
+# make it prompt for password if one wasn't set
+ifeq ($(SATPASS),MySecretPassword)
+	@echo $(SATPASS) is not a valid password! >&2
+else ifeq ($(SATPASS),pUtPa55w0rDh3rE)
+	@echo $(SATPASS) is not a valid password! >&2
+else ifneq ($(SATPASS),)
+	PASS := -passin pass:$(SATPASS)
+endif
+	openssl pkcs8 -inform DER -in $< -out $@ $(PASS) || \
+	 (rm -f $@; false)
 $(CERTFILE).pem: $(CERTFILE)
-	openssl x509 -inform DER -outform PEM -in $< -pubkey -out $@
+	openssl x509 -inform DER -outform PEM -in $< -pubkey -out $@ || \
+	 (rm -f $@; false)
 $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
 ifneq ($(MODCERT),)
- ifeq ($(MODCERT),$(MODKEY))
+ifeq ($(MODCERT),$(MODKEY))
 	@echo certificate and key match >&2
- else
+else
 	@echo certificate and key do not match &>2
 	@false
- endif
+endif
 else
 	@echo could not find modulus of certificate and/or key >&2
 	@false

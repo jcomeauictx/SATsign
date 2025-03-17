@@ -32,7 +32,22 @@ You can:
 
 To do all the above, usually you can simply type the command `make` from this
 directory, as long as your thumb drive is plugged in or you've copied the
-`FIEL_*` directory from it into your home directory.
+`FIEL_*` directory from it into your home directory. The .pem and .pfx files
+will be stored in that same FIEL_* subdirectory.
+
+To use the cert to sign a document, assuming you're running Debian
+GNU/Linux or similar, you'll need to install libreoffice-common, gpgsm,
+and firefox.
+
+Then, once you have done the steps below regarding firefox and loffice
+(libreoffice), you can:
+
+* for a file /tmp/myfile.pdf, you can `make /tmp/myfile.signed.pdf`; this
+  will use LibreOffice in silent (no GUI) mode to sign the PDF.
+
+Read the developer's notes below, and the Makefile, to see more details
+about how this works, and what other things can be done, including the use
+of gpgsm.
 
 ## developer's notes
 

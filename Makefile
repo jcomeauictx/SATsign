@@ -120,7 +120,6 @@ $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
 	@echo key file: $(KEYFILE) >&2
 	@echo certificate file: $(CERTFILE) >&2
 	@echo password: $(SATPASS) >&2
-	@echo 'Just hit the <ENTER> key at password prompts below' >&2
 	openssl verify -verbose -show_chain -CApath sat.certs $(CERTFILE).pem
 	openssl pkcs12 -export -inkey $< -in $(word 2, $+) \
 	 -out $@ -passout pass: -legacy -chain -CApath sat.certs

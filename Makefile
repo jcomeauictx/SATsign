@@ -13,10 +13,6 @@ TRUSTLIST ?= $(HOME)/.gnupg/trustlist.txt
 REALLY_DELETE ?= false
 SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
 	 -nameopt RFC2253 | sed 's/^subject=//')
-# the following have deferred assignment; pemfiles aren't ready at first
-LAZY_EVAL_TEST = $(shell echo '***THIS SHOULD NOT BE SHOWN ***!!!' >&2)
-MODKEY = $(shell openssl rsa -noout -modulus -in $(KEYFILE).pem)
-MODCER = $(openssl x509 -noout -modulus -in $(CERTFILE).pem)
 ifeq ($(SHOWENV),)
  export KEYFILE CERTFILE SATPASS
 else
@@ -104,17 +100,19 @@ $(CERTFILE).pem: $(CERTFILE)
 	openssl x509 -inform DER -outform PEM -in $< -pubkey -out $@ || \
 	 (rm -f $@; false)
 $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
-ifneq ($(MODCER),)
-ifeq ($(MODCER),$(MODKEY))
-	@echo certificate and key match >&2
-else
-	@echo certificate and key do not match &>2
-	@false
-endif
-else
-	@echo could not find modulus of certificate and/or key >&2
-	@false
-endif
+	modcert=$$(openssl x509 -noout -modulus -in $(word 2, $+)); \
+	modkey=$$(openssl rsa -noout -modulus -in $<); \
+	if [ -n "$$modcert" ]; then \
+		if [ "$$modcert" = "$$modkey" ]; then \
+			echo certificate and key match >&2; \
+		else \
+			echo certificate and key do not match >&2; \
+			exit 1; \
+		fi; \
+	else \
+		echo could not find modulus of certificate and/or key >&2; \
+		exit 1; \
+	fi
 	@# generate pkcs12 combined cert and key for gpgsm
 	@# https://stackoverflow.com/a/62613267/493161
 	@# https://serverfault.com/a/1011396/58945

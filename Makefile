@@ -126,3 +126,14 @@ $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
 push:
 	git push -u origin master
 	git push -u githost master
+info:
+	openssl x509 -in $(CERTFILE).pem -noout -serial
+	openssl x509 -in $(CERTFILE).pem -noout -startdate
+	openssl x509 -in $(CERTFILE).pem -noout -enddate
+	openssl x509 -in $(CERTFILE).pem -noout -subject
+serial:
+	@command -v xxd >/dev/null || (echo Requires installing xxd >&2; false)
+	@echo -n 'real (unhexlified) serial number is '
+	@openssl x509 -in $(CERTFILE).pem -noout -serial | \
+	 awk -F= '$$1 == "serial" {print $$2}' | xxd -r -p
+	@echo  # send newline, since xxd did not

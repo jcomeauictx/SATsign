@@ -45,7 +45,9 @@ You may note something odd about the serial number; every group of two digits
 starts with a 3. This means that the actual number has been encoded in
 hexadecimal for reasons unknown to me. To see the real number, use
 `make serial`, but everything I've seen so far indicates that the hex-encoded
-serial number is what SAT uses.
+serial number is what SAT uses. (Update: running `strings` on the binary .cer
+file reveals the real serial number as well; it's openssl changing it to
+hex-encoded.)
 
 ### Advanced use
 
@@ -86,7 +88,8 @@ of gpgsm.
 * For use with Firefox and LibreOffice, first set up a separate profile
   (I called mine SAT) by starting firefox with the -ProfileManager option.
 * In firefox, click "hamburger" icon at upper right for settings, then
-  Privacy & Security | Certificates | View Certificates | Your Certificates | Import
+  Privacy & Security | Certificates | View Certificates |
+  Your Certificates | Import
   Locate the pfx file and import it; you will see it imports your key under
   Your Certificates, and *also* imports the SAT cert, and the self-signed
   Banco de Mexico root certificate, under Authorities.
@@ -99,4 +102,7 @@ of gpgsm.
   and choose the firefox:SAT profile you just made. Then, from
   File | Digital Signatures | Digital Signatures, you can sign a PDF document.
   It will show that the signature is valid.
-* [Signing from command line](https://help.libreoffice.org/latest/he/text/shared/guide/pdf_params.html), [and more details](https://vmiklos.hu/blog/pdf-convert-to.html) (now incorporated into Makefile: `make /path/to/mydoc.signed.pdf`)
+* [Signing from command line](https://help.libreoffice.org/
+  latest/he/text/shared/guide/pdf_params.html), [and more details](https://
+  vmiklos.hu/blog/pdf-convert-to.html) (now incorporated into Makefile:
+  `make /path/to/mydoc.signed.pdf`)

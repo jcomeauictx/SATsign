@@ -13,16 +13,18 @@ TRUSTLIST ?= $(HOME)/.gnupg/trustlist.txt
 REALLY_DELETE ?= false
 SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
 	 -nameopt RFC2253 | sed 's/^subject=//')
-# the following two have deferred assignment; pemfiles aren't ready at first
-MODCERT = $(shell openssl x509 -noout -modulus -in $(CERTFILE).pem)
+# the following have deferred assignment; pemfiles aren't ready at first
+LAZY_EVAL_TEST = $(shell echo '***THIS SHOULD NOT BE SHOWN ***!!!' >&2)
 MODKEY = $(shell openssl rsa -noout -modulus -in $(KEYFILE).pem)
+#MODCERT = $(shell openssl x509 -noout -modulus -in $(CERTFILE).pem)
 ifeq ($(SHOWENV),)
  export KEYFILE CERTFILE SATPASS
 else
  export
 endif
 # recipes begin here
-faketarget: false
+faketarget:
+	false
 all: initialize importcerts trust test
 initialize: $(KEYFILE).pfx
 trust: trustlist.txt

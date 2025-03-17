@@ -14,7 +14,7 @@
 
 ## Management of SAT certificates and digital signatures
 
-(SAT is the Mexican equivalent of the IRS. When you obtain a CFR (tax ID,
+(SAT is the Mexican equivalent of the IRS. When you obtain a RFC (tax ID,
 required for opening a Mexican bank account and for other purposes), they
 ask for a thumb drive on which they store a certificate and key. You can
 use these for signing documents to be sent to SAT. They aren't of much use

@@ -123,3 +123,6 @@ $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
 	openssl verify -verbose -show_chain -CApath sat.certs $(CERTFILE).pem
 	openssl pkcs12 -export -inkey $< -in $(word 2, $+) \
 	 -out $@ -passout pass: -legacy -chain -CApath sat.certs
+push:
+	git push -u origin master
+	git push -u githost master

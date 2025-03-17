@@ -16,7 +16,7 @@ SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
 # the following have deferred assignment; pemfiles aren't ready at first
 LAZY_EVAL_TEST = $(shell echo '***THIS SHOULD NOT BE SHOWN ***!!!' >&2)
 MODKEY = $(shell openssl rsa -noout -modulus -in $(KEYFILE).pem)
-#MODCERT = $(shell openssl x509 -noout -modulus -in $(CERTFILE).pem)
+MODCERT = $(shell echo ARGH >&2; openssl x509 -noout -modulus -in $(CERTFILE).pem)
 ifeq ($(SHOWENV),)
  export KEYFILE CERTFILE SATPASS
 else

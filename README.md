@@ -1,7 +1,7 @@
-certificados-sat-openssl
+# certificados-sat-openssl
 ========================
 
-Manejo de certificados y sello digital SAT
+## Manejo de certificados y sello digital SAT
 
 - Permite crear archivos key.pem
 - Permite crear archivos cer.pem
@@ -12,7 +12,29 @@ Manejo de certificados y sello digital SAT
 - Permite verificar si un certificado no es una fiel
 - Verifica que el certificado(.cer) sea pareja de la llave(.key)
 
-# notes for English-speaking users
+## Management of SAT certificates and digital signatures
+
+(SAT is the Mexican equivalent of the IRS. When you obtain a CFR (tax ID,
+required for opening a Mexican bank account and for other purposes), they
+ask for a thumb drive on which they store a certificate and key. You can
+use these for signing documents to be sent to SAT. They aren't of much use
+generally, as the cert chain only goes to the Banco de Mexico, which has
+a self-signed CAcert not recognized by any major operating systems or web
+browsers).
+
+You can:
+- Unlock (remove password from) your .key file and store it in a .key.pem file.
+- Convert your .cer (certificate file) into .pem as well, for easier use.
+- Create a .pfx file which combines the two .pem files, useful for
+  digital signatures.
+- Ascertain that the certificate and key match.
+- Make sure that the certificate chain is complete.
+
+To do all the above, usually you can simply type the command `make` from this
+directory, as long as your thumb drive is plugged in or you've copied the
+`FIEL_*` directory from it into your home directory.
+
+## developer's notes
 
 * I just grepped the openssl calls out of the php file and made a bash script
 * The .pfx file is to import into gpgsm for signing. could also name as .p12

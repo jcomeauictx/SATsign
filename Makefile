@@ -3,6 +3,11 @@ SATDIR ?= $(word 1, $(wildcard $(HOME)/FIEL_* $(HOME)/*/FIEL_* /mnt/FIEL_* \
  /mnt/*/FIEL_*))
 KEYFILE ?= $(wildcard $(SATDIR)/Claveprivada_FIEL_*.key)
 CERTFILE ?= $(wildcard $(SATDIR)/*.cer)
+# you can edit the following to use your actual password
+# or better, from command line, type a space (to keep plaintext out of
+# history file), then: export SATPASS=MySecretPassword
+# NOTE: don't actually use MySecretPassword! type your own instead!
+# and when you're done with your SAT files, `unset SATPASS`
 SATPASS ?= pUtPa55w0rDh3rE
 TRUSTLIST ?= $(HOME)/.gnupg/trustlist.txt
 REALLY_DELETE ?= false
@@ -16,13 +21,10 @@ ifeq ($(SHOWENV),)
 else
  export
 endif
-# or better, from command line, type a space (to keep plaintext out of
-# history file), then: export SATPASS=MySecretPassword
-# NOTE: don't actually use MySecretPassword! type your own instead!
-# and when you're done with your SAT files, `unset SATPASS`
+# recipes begin here
+faketarget: false
 all: initialize importcerts trust test
 initialize: $(KEYFILE).pfx
-faketarget: false
 trust: trustlist.txt
 	while read line; do \
 	 if [ -e $(TRUSTLIST) ] && grep -q "$$line" $(TRUSTLIST); then \

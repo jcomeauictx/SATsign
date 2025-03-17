@@ -4,9 +4,13 @@ SATDIR ?= $(word 1, $(wildcard $(HOME)/FIEL_* $(HOME)/*/FIEL_* /mnt/FIEL_* \
 KEYFILE ?= $(wildcard $(SATDIR)/Claveprivada_FIEL_*.key)
 CERTFILE ?= $(wildcard $(SATDIR)/*.cer)
 SATPASS ?= pUtPa55w0rDh3rE
-PASS :=# gets set later during pfx creation
 TRUSTLIST ?= $(HOME)/.gnupg/trustlist.txt
 REALLY_DELETE ?= false
+SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
+	 -nameopt RFC2253 | sed 's/^subject=//')
+# the following two have deferred assignment; pemfiles aren't ready at first
+MODCERT = $(shell openssl x509 -noout -modulus -in $(CERTFILE).pem)
+MODKEY = $(shell openssl rsa -noout -modulus -in $(KEYFILE).pem)
 ifeq ($(SHOWENV),)
  export KEYFILE CERTFILE SATPASS
 else
@@ -18,11 +22,7 @@ endif
 # and when you're done with your SAT files, `unset SATPASS`
 all: initialize importcerts trust test
 initialize: $(KEYFILE).pfx
-SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
-	 -nameopt RFC2253 | sed 's/^subject=//')
-# the following two have deferred assignment; pemfiles aren't ready at first
-MODCERT = $(shell openssl x509 -noout -modulus -in $(CERTFILE).pem)
-MODKEY = $(shell openssl rsa -noout -modulus -in $(KEYFILE).pem)
+faketarget: false
 trust: trustlist.txt
 	while read line; do \
 	 if [ -e $(TRUSTLIST) ] && grep -q "$$line" $(TRUSTLIST); then \
@@ -82,13 +82,21 @@ $(KEYFILE).pem: $(KEYFILE)
 # make it prompt for password if one wasn't set
 ifeq ($(SATPASS),MySecretPassword)
 	@echo $(SATPASS) is not a valid password! >&2
+	@$(MAKE) SATPASS= $@
 else ifeq ($(SATPASS),pUtPa55w0rDh3rE)
 	@echo $(SATPASS) is not a valid password! >&2
+	@$(MAKE) SATPASS= $@
 else ifneq ($(SATPASS),)
-PASS := -passin pass:$(SATPASS)
-endif
-	openssl pkcs8 -inform DER -in $< -out $@ $(PASS) || \
+	openssl pkcs8 -inform DER -in $< -out $@ -passin pass:$(SATPASS) || \
+	 (\
+	  rm -f $@; \
+	  echo $(SATPASS) was not accepted as the password. >&2; \
+	  $(MAKE) SATPASS= $@ \
+	 )
+else  # prompt for password
+	openssl pkcs8 -inform DER -in $< -out $@ || \
 	 (rm -f $@; false)
+endif
 $(CERTFILE).pem: $(CERTFILE)
 	openssl x509 -inform DER -outform PEM -in $< -pubkey -out $@ || \
 	 (rm -f $@; false)

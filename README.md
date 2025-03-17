@@ -35,6 +35,20 @@ directory, as long as your thumb drive is plugged in or you've copied the
 `FIEL_*` directory from it into your home directory. The .pem and .pfx files
 will be stored in that same FIEL_* subdirectory.
 
+- view your certificate's serial number, start date, end date, and subject
+
+`make info` does this. The "subject" includes your ALL CAPS NAME,
+x500UniqueIdentifier which is your RFC number, and serialNumber which
+is your CURP (another identication number used by the Mexican government).
+
+You may note something odd about the serial number; every group of two digits
+starts with a 3. This means that the actual number has been encoded in
+hexadecimal for reasons unknown to me. To see the real number, use
+`make serial`, but everything I've seen so far indicates that the hex-encoded
+serial number is what SAT uses.
+
+### Advanced use
+
 To use the cert to sign a document, assuming you're running Debian
 GNU/Linux or similar, you'll need to install libreoffice-common, gpgsm,
 and firefox.
@@ -84,4 +98,4 @@ of gpgsm.
   and choose the firefox:SAT profile you just made. Then, from
   File | Digital Signatures | Digital Signatures, you can sign a PDF document.
   It will show that the signature is valid.
-* [Signing from command line](https://help.libreoffice.org/latest/he/text/shared/guide/pdf_params.html), [and more details](https://vmiklos.hu/blog/pdf-convert-to.html)
+* [Signing from command line](https://help.libreoffice.org/latest/he/text/shared/guide/pdf_params.html), [and more details](https://vmiklos.hu/blog/pdf-convert-to.html) (now incorporated into Makefile: `make /path/to/mydoc.signed.pdf`)

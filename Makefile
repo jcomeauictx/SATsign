@@ -16,16 +16,15 @@ SUBJECT := $(shell openssl x509 -in $(CERTFILE) -noout -subject \
 # the following have deferred assignment; pemfiles aren't ready at first
 LAZY_EVAL_TEST = $(shell echo '***THIS SHOULD NOT BE SHOWN ***!!!' >&2)
 MODKEY = $(shell openssl rsa -noout -modulus -in $(KEYFILE).pem)
-MODCER = $(shell echo ARGH >&2; openssl x509 -noout -modulus -in $(CERTFILE).pem)
+MODCER = $(openssl x509 -noout -modulus -in $(CERTFILE).pem)
 ifeq ($(SHOWENV),)
  export KEYFILE CERTFILE SATPASS
 else
  export
 endif
 # recipes begin here
-faketarget:
-	false
-all: initialize importcerts trust test
+all: initialize
+advanced: all importcerts trust test
 initialize: $(KEYFILE).pfx
 trust: trustlist.txt
 	while read line; do \
@@ -105,8 +104,8 @@ $(CERTFILE).pem: $(CERTFILE)
 	openssl x509 -inform DER -outform PEM -in $< -pubkey -out $@ || \
 	 (rm -f $@; false)
 $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
-ifneq ($(MODCERT),)
-ifeq ($(MODCERT),$(MODKEY))
+ifneq ($(MODCER),)
+ifeq ($(MODCER),$(MODKEY))
 	@echo certificate and key match >&2
 else
 	@echo certificate and key do not match &>2

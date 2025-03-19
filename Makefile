@@ -124,8 +124,8 @@ $(KEYFILE).pfx: $(KEYFILE).pem $(CERTFILE).pem
 	openssl pkcs12 -export -inkey $< -in $(word 2, $+) \
 	 -out $@ -passout pass: -legacy -chain -CApath sat.certs
 push:
-	git push -u origin master
-	git push -u githost master
+	git push origin
+	git push githost
 info:
 	openssl x509 -in $(CERTFILE).pem -noout -serial
 	openssl x509 -in $(CERTFILE).pem -noout -startdate
